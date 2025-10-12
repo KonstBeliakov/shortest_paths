@@ -31,9 +31,7 @@ def A_star(graph, node1, node2):
     if node1 == node2:
         return 0
 
-    distances = [[INF for _ in range(len(graph) + 1)] for _ in range(2)]
-    distances[OUT][node1] = 0
-    distances[IN][node2] = 0
+    visited_nodes = [{node1: 0}, {node2: 0}]
 
     queue = [[(0, node1)], [(0, node2)]]
 
@@ -49,7 +47,7 @@ def A_star(graph, node1, node2):
             direction = IN
             goal = node1
 
-        if current_distance > distances[direction][current_vertex]:
+        if current_distance > visited_nodes[direction].get(current_vertex, INF):
             continue
 
         dist = math.hypot(cords[current_vertex][0] - cords[goal][0], cords[current_vertex][1] - cords[goal][1])
@@ -59,11 +57,11 @@ def A_star(graph, node1, node2):
         for neigbor, weight in graph[current_vertex][direction]:
             distance = current_distance + weight
 
-            if distance < distances[direction][neigbor]:
-                distances[direction][neigbor] = distance
+            if distance < visited_nodes[direction].get(neigbor, INF):
+                visited_nodes[direction][neigbor] = distance
                 heapq.heappush(queue[direction], (distance, neigbor))
-                if distances[(direction + 1) % 2][neigbor] != INF:
-                    min_dist = min(min_dist, distances[IN][neigbor] + distances[OUT][neigbor])
+                if neigbor in visited_nodes[(direction + 1) % 2]:
+                    min_dist = min(min_dist, visited_nodes[IN][neigbor] + visited_nodes[OUT][neigbor])
 
     return min_dist if min_dist != INF else -1
 
