@@ -20,7 +20,7 @@ for edge in edges:
     graph[node2][IN].append((node1, length))
 
 
-distances = [[INF for _ in range(len(graph) + 1)] for _ in range(2)]
+distances = [[INF] * (n + 1) for _ in range(2)]
 visited_nodes = [[], []]
 
 
@@ -50,7 +50,7 @@ def bidirectional_djikstra(graph, node1: int, node2: int):
             current_distance, current_vertex = heapq.heappop(queue[IN])
             direction = IN
 
-        if current_distance > min_dist:
+        if current_distance * 2 > min_dist:
             return min_dist
 
         if current_distance > distances[direction][current_vertex]:
