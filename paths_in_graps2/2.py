@@ -8,12 +8,25 @@ inf = 10**9
 dist = [inf] * (n + 1)
 dist[1] = 0
 for _ in range(m-1):
+    flag = True
     for (u, v, cost) in edges:
-        dist[v] = min(dist[v], dist[u] + cost)
+        if dist[v] > dist[u] + cost:
+            dist[v] = dist[u] + cost
+            flag = False
+    if flag:  # there is no improvement in the graph
+        break
 
 
 # Check if we still can improve some dist
-print(int(
-    any([dist[v] > dist[u] + cost for (u, v, cost) in edges])
-))
-
+# print(int(
+#     any([dist[v] > dist[u] + cost for (u, v, cost) in edges])
+# ))
+if flag:
+    print(0)
+else:
+    for (u, v, cost) in edges:
+        if dist[v] > dist[u] + cost:
+            print(1)
+            break
+    else:
+        print(0)

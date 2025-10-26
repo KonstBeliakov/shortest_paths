@@ -17,4 +17,4 @@ while q:
         for (neighbor, cost) in adj[node]:
             heapq.heappush(q, (node_cost + cost, neighbor))
         visited[node] = True
-print(dist[v])
+print(dist[v] if dist[v] != inf else -1)

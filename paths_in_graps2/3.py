@@ -8,22 +8,27 @@ u = int(input())
 
 inf = 10**9
 dist = [inf] * (n+1)
-prev = [None] * (n+1)
 dist[u] = 0
 for i in range(m - 1):
     for (v1, v2, cost) in edges:
-        dist[v2] = min(dist[v2], dist[v1] + cost)
-        prev[v2] = v1
+        if  dist[v1] != inf and dist[v2] > dist[v1] + cost:
+            dist[v2] = dist[v1] + cost
 
 # Checking for negative cycles
+neg_cycles = [False] * (n+1)
 for (v1, v2, cost) in edges:
-    if(dist[v2] > dist[v1] + cost):
-        dist[v2] = -inf
+    if dist[v1] != inf and dist[v2] > dist[v1] + cost:
+        neg_cycles[v2] = True
+
+for i in range(m - 1):
+    for (v1, v2, _) in edges:
+        if neg_cycles[v1]:
+            neg_cycles[v2] = True
 
 for i in range(1, n + 1):
     if dist[i] == inf:
         print("*")
-    elif dist[i] == -inf:
+    elif neg_cycles[i]:
         print("-")
     else:
         print(dist[i])
